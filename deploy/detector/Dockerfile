@@ -1,4 +1,7 @@
-FROM python:3.10-bullseye
+FROM python:3.10-slim
+
+RUN apt-get update && apt-get install libglib2.0-0 libgl1 ffmpeg libsm6 libxext6  -y
+
 
 RUN mkdir -p /app/detector
 WORKDIR ./app
@@ -15,5 +18,3 @@ COPY poetry.lock pyproject.toml /app/
 RUN poetry install --only backend
 
 COPY ./detector /app/detector
-
-COPY ./celery_tasks /app/celery_tasks

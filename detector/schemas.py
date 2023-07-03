@@ -1,12 +1,23 @@
-from pydantic import BaseModel
+"""Pydantic schemas"""
+import enum
+
+from pydantic import BaseModel, Field
+
+
+__all__ = ["Task", "TaskResponse"]
+
+
+class TaskStatus(str, enum.Enum):
+    SUCCESS = "SUCCESS"
+    PROCESSING = "PROCESSING"
+    FAILED = "FAILED"
+    ERROR = "ERROR"
 
 
 class Task(BaseModel):
-    task_id: str
-    status: str
+    task_id: str = Field(description="Unique ID of task")
+    status: str = Field(description="Status of task")
 
 
-class Prediction(Task):
-    task_id: str
-    status: str
-    result: str
+class TaskResponse(Task):
+    result: str | None = Field(default="", description="Resulting Path to get predicted image")

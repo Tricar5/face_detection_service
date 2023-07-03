@@ -29,9 +29,11 @@ services:
       - UPLOAD_FOLDER=${UPLOAD_FOLDER}
       - RESULT_FOLDER=${RESULT_FOLDER}
       - STATIC_FOLDER=${STATIC_FOLDER}
+      - BROKER_URI=${BROKER_URI}
+      - BACKEND_URI=${BACKEND_URI}
     volumes:
-      - ./repo/uploads:/app/uploads
-      - ./repo/results:/app/results
+      - ../repo/uploads:/app/repo/uploads
+      - ../repo/results:/app/repo/results
     command: sh -c "poetry run uvicorn detector.__main__:app --host 0.0.0.0 --port 8000"
     ports:
       - "8000:8000"
@@ -39,22 +41,33 @@ services:
   worker:
     container_name: celery_worker
     build:
-      dockerfile: deploy/worker/Dockerfile
+      dockerfile: deploy/detector/Dockerfile
       context: ..
-
     environment:
       - UPLOAD_FOLDER=${UPLOAD_FOLDER}
       - RESULT_FOLDER=${RESULT_FOLDER}
       - STATIC_FOLDER=${STATIC_FOLDER}
+      - BROKER_URI=${BROKER_URI}
+      - BACKEND_URI=${BACKEND_URI}
     volumes:
-      - ./repo/uploads:/app/uploads
-      - ./repo/results:/app/results
+      - ../repo/uploads:/app/repo/uploads
+      - ../repo/results:/app/repo/results
+      - ../repo/models:/app/repo/models
 
-    command: sh -c "poetry run celery -A celery_tasks.app_worker worker -l INFO --pool=solo"
+    command: sh -c "poetry run celery -A detector.tasks.app_worker worker -l INFO --pool=solo"
     depends_on:
       - redis
       - rabbitmq
       - api
+
+  webapp:
+    container_name: webapp
+    build:
+      dockerfile: deploy/webapp/Dockerfile
+      context: ..
+    command: sh -c "cd /app && uvicorn app:app --host 0.0.0.0 --port 8080 --reload"
+    ports:
+      - "8080:8080"
 
 volumes:
   repo:

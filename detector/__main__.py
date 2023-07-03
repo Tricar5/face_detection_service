@@ -7,8 +7,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from detector.api.endpoints import api_router
 from detector.config import settings
-from detector.endpoints import api_router
 
 
 isdir = os.path.isdir(settings.UPLOAD_FOLDER)
@@ -26,12 +26,12 @@ origins = [
 
 
 def create_app() -> FastAPI:
-    appplication = FastAPI()
-    appplication.mount("/static", StaticFiles(directory=settings.STATIC_FOLDER), name="static")
+    application = FastAPI()
+    application.mount("/repo", StaticFiles(directory=settings.STATIC_FOLDER), name="static")
 
-    appplication.include_router(api_router, prefix="/detector")
+    application.include_router(api_router, prefix="/api")
 
-    appplication.add_middleware(
+    application.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
@@ -39,7 +39,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    return appplication
+    return application
 
 
 app: FastAPI = create_app()
