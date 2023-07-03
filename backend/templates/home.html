@@ -1,0 +1,35 @@
+{% extends "_base.html" %}
+
+{% block content %}
+
+<div class="starter-template">
+  <h1>FastAPI + Celery + Docker</h1>
+  <hr><br>
+  <div>
+    <h3>Tasks</h3>
+    <p>Upload images.</p>
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <input type="file" id="imageUpload" multiple />
+      <button onclick="uploadImages()">Отправить изображения</button>
+    </div>
+  </div>
+  <br><br>
+  <div>
+    <h3>Task Status</h3>
+    <br>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody id="tasks">
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

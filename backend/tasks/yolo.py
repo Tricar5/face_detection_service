@@ -210,4 +210,6 @@ class YoloModel:
         # Draw detections
         dstimg = self.draw_detections(srcimg, boxes, scores, kpts)
 
+        # Saving Image
         cv2.imwrite(f"{result_path}/{image_path.split('/')[-1]}", dstimg)
+        return boxes

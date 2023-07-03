@@ -75,7 +75,7 @@ run:
 	uvicorn ${APPLICATION_NAME}.__main__:app --reload --port 8080
 
 celery:
-	celery -A detector.tasks.app_worker worker
+	celery -A backend.tasks.app_worker worker
 
 # Migrations
 

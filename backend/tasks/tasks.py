@@ -4,11 +4,12 @@ import logging
 from celery import Task
 from celery.exceptions import MaxRetriesExceededError
 
-from detector.config import settings
-from detector.schemas import TaskStatus
-from detector.tasks.app_worker import app
-from detector.tasks.yolo import YoloModel
+import cv2
 
+from backend.config import settings
+from backend.schemas import TaskStatus
+from backend.tasks.app_worker import app
+from backend.tasks.yolo import YoloModel
 
 __all__ = [
     "predict_image",
@@ -29,10 +30,24 @@ class PredictTask(Task):
 
 
 @app.task(ignore_result=False, bind=True, base=PredictTask)
-def predict_image(self, data):
+def predict_image(self, img_path):
     try:
-        data_pred = self.model.predict(data, settings.RESULT_FOLDER)
-        return {"status": TaskStatus.SUCCESS, "result": data_pred}
+        # Read Image
+        srcimg = cv2.imread(img_path)
+
+        # Detect Objects
+        boxes, scores, classids, kpts = self.model.detect(srcimg)
+
+        # Draw detections
+        dstimg = self.model.draw_detections(srcimg, boxes, scores, kpts)
+
+        # Saving Image
+        res_path = f"{settings.RESULT_FOLDER}/{img_path.split('/')[-1]}"
+        cv2.imwrite(res_path, dstimg)
+        print(boxes)
+
+        # data_pred = self.model.predict(data, settings.RESULT_FOLDER)
+        return {"status": TaskStatus.SUCCESS, "result": res_path, "original": img_path}
     except Exception as ex:
         try:
             self.retry(countdown=2)

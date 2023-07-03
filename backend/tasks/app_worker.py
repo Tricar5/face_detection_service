@@ -4,7 +4,7 @@ import os
 
 from celery import Celery
 
-from detector.config import settings
+from backend.config import settings
 
 
 __all__ = [
