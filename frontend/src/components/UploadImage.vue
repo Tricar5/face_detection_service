@@ -1,32 +1,43 @@
 <template>
   <div>
-    <input type="file" ref="fileInput" @change="handleFileUpload">
-    <button @click="uploadFile">Загрузить</button>
+    <input type="file" ref="fileInput" multiple @change="handleFileChange">
+    <button @click="uploadImages">Загрузить</button>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script>
 import axios from 'axios';
 
-const selectedFile = ref(null);
+export default {
+  data() {
+    return {
+      selectedFiles: [],
+      fileNames: []
+    };
+  },
+  methods: {
+    handleFileChange(event) {
+      this.selectedFiles = Array.from(event.target.files);
+      this.fileNames = this.selectedFiles.map(file => file.name);
+    },
+    uploadImages() {
+      const formData = new FormData();
+      this.selectedFiles.forEach(file => {
+        formData.append('files', file);
+      });
 
-const handleFileUpload = (event) => {
-  selectedFile.value = event.target.files[0];
-};
-
-const uploadFile = () => {
-  const formData = new FormData();
-  formData.append('file', selectedFile.value);
-
-  axios.post('/api/face/process', formData)
-    .then(response => {
-      console.log('Success:', response.data);
-      // Дополнительные действия после успешной загрузки
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      // Обработка ошибок
-    });
+      axios.post('http://localhost:8000/api/face/process', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(response => {
+        console.log('Успешно загружено', response);
+      })
+      .catch(error => {
+        console.error('Ошибка загрузки', error);
+      });
+    }
+  }
 };
 </script>
