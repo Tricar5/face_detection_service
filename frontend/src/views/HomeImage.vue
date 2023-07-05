@@ -4,7 +4,7 @@ import UploadImage from "../components/UploadImage.vue";
 
 <template>
 	<main id="Home-page">
-		<h1>Home</h1>
+		<h1>Face Detection</h1>
     <div>
 		<UploadImage />
     </div>

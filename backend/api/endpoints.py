@@ -2,7 +2,7 @@ import logging
 import os
 import json
 import uuid
-from typing import List
+from datetime import datetime as dt
 
 from celery.result import AsyncResult
 from fastapi import APIRouter, File, UploadFile, status, Depends
@@ -26,11 +26,9 @@ api_router = APIRouter(tags=["Face Detection"])
 async def process_img(file: UploadFile = File(...)):
     """
     Endpoint to create task for image processing
-    :param files:
+    :param file:
     :return:
     """
-
-
     try:
         task_id = str(uuid.uuid4())
 
@@ -77,11 +75,9 @@ async def get_result(task_id: str):
 
 @api_router.get("/face/tasks/list",
                 )
-async def get_task_list(start: int = 0,
-                        end: int = 50,
-                        r=Depends(get_redis)):
+async def get_task_list(r=Depends(get_redis)):
     """Endpoint to get all processed tasks"""
-    tasks = get_all_tasks(r, start, end)
+    tasks = get_all_tasks(r)
 
     return JSONResponse(status_code=status.HTTP_200_OK, content={"data" : tasks})
 

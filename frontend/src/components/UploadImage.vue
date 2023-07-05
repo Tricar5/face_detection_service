@@ -27,15 +27,17 @@
 }
 
 .upload-image{
-    display: inline-block;
+  margin-top: 2%;
+  position: relative;
+    display: block;
   align-items: center;
-  margin: auto;
 }
 .upload-button {
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
-  padding: 15px 32px;
+
+  padding: 10px 16px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
