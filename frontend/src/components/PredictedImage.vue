@@ -1,12 +1,13 @@
 <template>
   <div class="task-container">
+        <button @click="refresh" class="refresh-button">Refresh</button>
     <div v-for="task in tasksData" :key="task.id" class="task">
       <div class="task-info">
-        <span class="task-id">
-          {{ task.id }}
-        </span>
         <span :class="['task-status', { 'success': task.status === 'SUCCESS' }]">
           {{ task.status }}
+        </span>
+        <span class="task-id">
+          {{ task.id }}
         </span>
       </div>
       <div class="task-actions">
@@ -16,7 +17,6 @@
         <img :src="task.photo" alt="Photo" />
       </div>
     </div>
-    <button @click="refresh" class="refresh-button">Refresh</button>
   </div>
 </template>
 
@@ -33,6 +33,7 @@
   margin-bottom: 10px;
   display: flex;
   text-align: left;
+
 }
 
 .task-info {
@@ -54,14 +55,17 @@
 }
 
 .task-actions {
-  margin-left: 10px;
+  position: absolute;
+  margin-left: 68%;
 }
 
+.butt
 .task-photo {
   position: relative;
   left: 0;
   right: 0;
-  bottom: -30px;
+  margin-bottom: 1%;
+  margin-top: 3%;
   text-align: center;
 }
 .task.show-photo .task-photo {

@@ -23,36 +23,35 @@ api_router = APIRouter(tags=["Face Detection"])
 @api_router.post("/face/process",
                  response_model=list[TaskResponse],
                  status_code=status.HTTP_201_CREATED)
-async def process_img(files: List[UploadFile] = File(...)):
+async def process_img(file: UploadFile = File(...)):
     """
     Endpoint to create task for image processing
     :param files:
     :return:
     """
-    tasks = []
-    try:
-        for file in files:
-            task_id = str(uuid.uuid4())
 
-            ext = file.filename.split(".")[-1]
-            file_name = f"{task_id}.{ext}"
-            file_path = f"{settings.UPLOAD_FOLDER}/{file_name}"
-            with open(file_path, "wb+") as f:
-                f.write(file.file.read())
+
+    try:
+        task_id = str(uuid.uuid4())
+
+        ext = file.filename.split(".")[-1]
+        file_name = f"{task_id}.{ext}"
+        file_path = f"{settings.UPLOAD_FOLDER}/{file_name}"
+        with open(file_path, "wb+") as f:
+            f.write(file.file.read())
 
                 # start task prediction
-            task_id = predict_image.delay(file_path)
+        task_id = predict_image.delay(file_path)
 
-            resp = TaskResponse(
+        resp = TaskResponse(
                 id=str(task_id), status=TaskStatus.PROCESSING, result=f"{settings.RESULT_FOLDER}/{file_name}"
             )
 
-            if not task_id:
+        if not task_id:
                 # logging.info(ex)
-                resp = TaskResponse(id=str(task_id), status=TaskStatus.ERROR)
+            resp = TaskResponse(id=str(task_id), status=TaskStatus.ERROR)
 
-            tasks.append(resp.dict())
-            return JSONResponse(status_code=202, content=tasks)
+        return JSONResponse(status_code=201, content=resp.dict())
     except Exception as ex:
         logging.info(ex)
         return JSONResponse(status_code=400, content={"message": str(ex)})

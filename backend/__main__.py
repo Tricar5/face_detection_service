@@ -12,8 +12,10 @@ from backend.config import settings
 
 
 origins = [
-    "http://localhost",
-    "http://localhost:8080",
+    #"http://localhost",
+    #"http://localhost:8080",
+    #"http://localhost:8080",
+    "*"
 ]
 
 
@@ -42,11 +44,4 @@ def create_app() -> FastAPI:
 app: FastAPI = create_app()
 
 
-#app.mount("/static", StaticFiles(directory="backend/static"), name="static")
-#templates = Jinja2Templates(directory="backend/templates")
-
-
-#@app.get("/")
-#def home(request: Request):
-#    return templates.TemplateResponse("home.html", context={"request": request})
-
+app.mount("/repo/results", StaticFiles(directory="repo/results"), name="results")
