@@ -44,7 +44,6 @@ def predict_image(self, img_path):
         # Saving Image
         res_path = f"{settings.RESULT_FOLDER}/{img_path.split('/')[-1]}"
         cv2.imwrite(res_path, dstimg)
-        print(boxes)
 
         # data_pred = self.model.predict(data, settings.RESULT_FOLDER)
         return {"result": res_path, "original": img_path, "bboxes": list(boxes[0])}
