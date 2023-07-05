@@ -47,7 +47,7 @@ def predict_image(self, img_path):
         print(boxes)
 
         # data_pred = self.model.predict(data, settings.RESULT_FOLDER)
-        return {"status": TaskStatus.SUCCESS, "result": res_path, "original": img_path}
+        return {"result": res_path, "original": img_path, "bboxes": list(boxes[0])}
     except Exception as ex:
         try:
             self.retry(countdown=2)

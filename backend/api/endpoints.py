@@ -44,12 +44,12 @@ async def process_img(files: List[UploadFile] = File(...)):
             task_id = predict_image.delay(file_path)
 
             resp = TaskResponse(
-                task_id=str(task_id), status=TaskStatus.PROCESSING, result=f"{settings.RESULT_FOLDER}/{file_name}"
+                id=str(task_id), status=TaskStatus.PROCESSING, result=f"{settings.RESULT_FOLDER}/{file_name}"
             )
 
             if not task_id:
                 # logging.info(ex)
-                resp = TaskResponse(task_id=str(task_id), status=TaskStatus.ERROR)
+                resp = TaskResponse(id=str(task_id), status=TaskStatus.ERROR)
 
             tasks.append(resp.dict())
             return JSONResponse(status_code=202, content=tasks)
@@ -71,12 +71,9 @@ async def get_result(task_id: str):
 
     # Task Not Ready
     if not task.ready():
-        return TaskResponse(task_id=str(task_id), status=task.status)
-
+        return TaskResponse(id=str(task_id), status=task.status)
     # Task done: return the value
-    task_result = task.get()
-    result = task_result.get("result")
-    return TaskResponse(task_id=str(task_id), status=task_result.get("status"), result=result)
+    return TaskResponse(id=str(task.id), status=task.status, result=task.result.get('result'))
 
 
 @api_router.get("/face/tasks/list",

@@ -15,7 +15,7 @@ class TaskStatus(str, enum.Enum):
 
 
 class Task(BaseModel):
-    task_id: str = Field(description="Unique ID of task")
+    id: str = Field(description="Unique ID of task")
     status: str = Field(description="Status of task")
 
 

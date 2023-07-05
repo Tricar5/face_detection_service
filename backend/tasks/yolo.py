@@ -126,7 +126,7 @@ class YoloModel:
             kpts[:, 1::3] = (kpts[:, 1::3] * 2.0 + (self.anchors[stride][:, 1].reshape((-1, 1)) - 0.5)) * stride
             kpts[:, 2::3] = 1 / (1 + np.exp(-kpts[:, 2::3]))
 
-            bbox -= np.array([[padw, padh, padw, padh]])  ###合理使用广播法则
+            bbox -= np.array([[padw, padh, padw, padh]])
             bbox *= np.array([[scale_w, scale_h, scale_w, scale_h]])
             kpts -= np.tile(np.array([padw, padh, 0]), 5).reshape((1, 15))
             kpts *= np.tile(np.array([scale_w, scale_h, 1]), 5).reshape((1, 15))
@@ -202,14 +202,14 @@ class YoloModel:
         return image
 
     def predict(self, image_path, result_path):
-        srcimg = cv2.imread(image_path)
+        src_img = cv2.imread(image_path)
 
         # Detect Objects
-        boxes, scores, classids, kpts = self.detect(srcimg)
+        boxes, scores, classids, kpts = self.detect(src_img)
 
         # Draw detections
-        dstimg = self.draw_detections(srcimg, boxes, scores, kpts)
+        dst_img = self.draw_detections(src_img, boxes, scores, kpts)
 
         # Saving Image
-        cv2.imwrite(f"{result_path}/{image_path.split('/')[-1]}", dstimg)
+        cv2.imwrite(f"{result_path}/{image_path.split('/')[-1]}", dst_img)
         return boxes

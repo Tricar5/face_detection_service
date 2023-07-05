@@ -59,17 +59,6 @@ services:
       - rabbitmq
       - api
 
-  frontend:
-    build:
-      dockerfile: deploy/frontend/Dockerfile
-      context: ..
-
-    command: sh -c "npm run serve"
-    volumes:
-      - ../frontend:/app
-      - ../frontend:/app/node_modules
-    ports:
-      - "8080:8080"
 
 volumes:
   repo:
