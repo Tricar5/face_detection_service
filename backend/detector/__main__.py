@@ -1,7 +1,6 @@
 import os
 import sys
 
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -12,20 +11,15 @@ from detector.config import settings
 
 
 origins = [
-    #"http://localhost",
-    #"http://localhost:8080",
-    #"http://localhost:8080",
+    # "http://localhost",
+    # "http://localhost:8080",
+    # "http://localhost:8080",
     "*"
 ]
 
 
 def create_app() -> FastAPI:
-
-    application = FastAPI(
-        title=settings.API_NAME,
-        version=settings.API_VERSION,
-        docs_url="/docs"
-    )
+    application = FastAPI(title=settings.API_NAME, version=settings.API_VERSION, docs_url="/docs")
 
     # Include additional Router
     application.include_router(task_router, prefix="/api")

@@ -9,7 +9,7 @@ __all__ = ["settings", "get_settings"]
 
 class AppSettings(BaseSettings):
     # Base App Settings
-    API_NAME: str = os.getenv("API_NAME","Face Detector")
+    API_NAME: str = os.getenv("API_NAME", "Face Detector")
     API_VERSION: str = os.getenv("API_VERSION", "0.2.0")
 
     # Files Settings

@@ -1,8 +1,9 @@
 """Pydantic schemas"""
+import datetime as dt
 import enum
 
 from pydantic import BaseModel, Field
-import datetime as dt
+
 
 __all__ = ["Task", "TaskResponse"]
 

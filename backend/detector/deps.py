@@ -1,17 +1,13 @@
 import redis
+
 from detector.config import settings
 
-import redis
 
-__all__ = [
-    "get_redis"
-]
+__all__ = ["get_redis"]
 
 
 def create_redis():
-    return redis.ConnectionPool.from_url(
-        settings.BACKEND_URI
-    )
+    return redis.ConnectionPool.from_url(settings.BACKEND_URI)
 
 
 pool = create_redis()

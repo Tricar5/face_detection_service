@@ -52,19 +52,25 @@ services:
     volumes:
       - ../repo/:/app/repo/
       - ../backend:/app
-
     command: sh -c "poetry run celery -A detector.tasks.app_worker worker -l INFO --pool=solo"
     depends_on:
       - redis
       - rabbitmq
       - backend
 
+  flower:
+    image: mher/flower:0.9.7
+    command: [ 'flower', '--broker=amqp://rabbitmq', '--port=5555' ]
+    ports:
+      - 5557:5555
+    depends_on:
+      - redis
+
   frontend:
     container_name: frontend
     build:
       dockerfile: deploy/frontend/Dockerfile
       context: ..
-#    command: sh -c "serve -s dist -p 8080 "
     ports:
       - '8080:80'
     volumes:

@@ -1,15 +1,15 @@
 """Celery Tasks module"""
 import logging
 
+import cv2
 from celery import Task
 from celery.exceptions import MaxRetriesExceededError
-
-import cv2
 
 from detector.config import settings
 from detector.schemas import TaskStatus
 from detector.tasks.app_worker import app
 from detector.tasks.yolo import YoloModel
+
 
 __all__ = [
     "predict_image",

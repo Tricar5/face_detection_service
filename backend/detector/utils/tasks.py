@@ -1,12 +1,11 @@
 """"""
 import json
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 from redis import Redis
 
-__all__ = [
-    "get_all_tasks"
-]
+
+__all__ = ["get_all_tasks"]
 
 
 def get_all_tasks(r: Redis) -> list[dict[str, Any]]:
@@ -20,8 +19,12 @@ def get_all_tasks(r: Redis) -> list[dict[str, Any]]:
             break
         k = key.decode("utf-8")
         task_body = json.loads(r.get(k).decode("utf-8"))
-        tasks.append({"id": k.replace("celery-task-meta-", ""),
-                          "status": task_body.get("status"),
-                          "result": task_body.get("result").get("result")})
+        tasks.append(
+            {
+                "id": k.replace("celery-task-meta-", ""),
+                "status": task_body.get("status"),
+                "result": task_body.get("result").get("result"),
+            }
+        )
 
     return tasks
