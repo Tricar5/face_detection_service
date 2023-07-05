@@ -121,7 +121,7 @@ disable = [
   "C0114",  # missing-module-docstring
   "C0116",  # missing-function-docstring
   "R0903",  # too-few-public-methods (for sqlalchemy tables and pydantic classes)
-  "C0115",  # missing-class-docstring (for backend routes)
+  "C0115",  # missing-class-docstring (for detector routes)
   "C0103",  # invalid-name (for pydatic settings)
   "I1101",  # c-extension-no-member
 ]

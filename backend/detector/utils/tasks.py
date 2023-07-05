@@ -1,5 +1,7 @@
 """"""
 import json
+from typing import List, Dict, Any
+
 from redis import Redis
 
 __all__ = [
@@ -7,7 +9,7 @@ __all__ = [
 ]
 
 
-def get_all_tasks(r: Redis, st, end) -> list[str]:
+def get_all_tasks(r: Redis) -> list[dict[str, Any]]:
     """Function to get all tasks"""
 
     tasks = []

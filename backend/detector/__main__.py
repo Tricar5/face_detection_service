@@ -7,8 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from backend.api import api_router as task_router
-from backend.config import settings
+from detector.api import api_router as task_router
+from detector.config import settings
 
 
 origins = [

@@ -72,7 +72,7 @@ export default {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       axios
-        .post('http://127.0.0.1:8000/api/face/process', formData)
+        .post('/api/face/process', formData)
         .then(response => {
           console.log(response)
           if (response.status === 201)  {
@@ -89,11 +89,11 @@ export default {
     checkTaskStatus() {
       const checkStatus = () => {
         axios
-          .get(`http://127.0.0.1:8000/api/face/${this.task.id}`)
+          .get(`/api/face/${this.task.id}`)
           .then(response => {
             const status = response.data.status;
             if (status === 'SUCCESS') {
-              this.result = `http://127.0.0.1:8000/${response.data.result}`;
+              this.result = axios.defaults.baseURL + `/${response.data.result}`;
             } else if (status === 'PENDING' || status === 'PROCESSING') {
               // Если статус задачи еще не "SUCCESS", продолжаем опрашивать
               setTimeout(checkStatus, 500); // Опрос каждую секунду (1000 мс)

@@ -9,11 +9,11 @@ from fastapi import APIRouter, File, UploadFile, status, Depends
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse, FileResponse
 
-from backend.deps import get_redis
-from backend.config import settings
-from backend.schemas import Task, TaskResponse, TaskStatus
-from backend.tasks import predict_image
-from backend.utils import get_all_tasks
+from detector.deps import get_redis
+from detector.config import settings
+from detector.schemas import Task, TaskResponse, TaskStatus
+from detector.tasks import predict_image
+from detector.utils import get_all_tasks
 
 __all__ = ["api_router"]
 

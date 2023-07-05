@@ -1,5 +1,5 @@
 import redis
-from backend.config import settings
+from detector.config import settings
 
 import redis
 

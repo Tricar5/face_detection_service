@@ -44,11 +44,11 @@ args := $(wordlist 2, 100, $(MAKECMDGOALS))
 # Code style
 
 fmt:
-	poetry run python3 -m isort $(APPLICATION_NAME)
-	poetry run python3 -m black $(APPLICATION_NAME)
+	cd backend && poetry run python3 -m isort $(APPLICATION_NAME)
+	cd backend && poetry run python3 -m black $(APPLICATION_NAME)
 
 lint:
-	poetry run pylint ${APPLICATION_NAME}
+	cd backend && poetry run pylint ${APPLICATION_NAME}
 
 
 
@@ -72,10 +72,10 @@ docker-run:
 # Application cmds
 
 run:
-	uvicorn ${APPLICATION_NAME}.__main__:app --reload --port 8080
+	cd backend && uvicorn ${APPLICATION_NAME}.__main__:app --reload --port 8080
 
 celery:
-	celery -A backend.tasks.app_worker worker
+	cd backend && celery -A backend.tasks.app_worker worker
 
 # Migrations
 

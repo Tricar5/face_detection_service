@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     fetchTasks() {
-      axios.get('http://localhost:8000/api/face/tasks/list')
+      axios.get('/api/face/tasks/list')
         .then(response => {
           this.tasksData = response.data.data.map(task => ({
             ...task,
@@ -167,7 +167,7 @@ export default {
       }
     },
     fetchPhoto(task) {
-      axios.get(`http://localhost:8000/api/face/result/${task.id}`, { responseType: 'arraybuffer' })
+      axios.get(`/api/face/result/${task.id}`, { responseType: 'arraybuffer' })
         .then(response => {
           const base64Image = btoa(
             new Uint8Array(response.data)

@@ -19,8 +19,8 @@ services:
       - "6379:6379"
 
 
-  api:
-    container_name: backend
+  backend:
+    container_name: detector
     restart: unless-stopped
     build:
       dockerfile: deploy/backend/Dockerfile
@@ -33,8 +33,8 @@ services:
       - BACKEND_URI=${BACKEND_URI}
     volumes:
       - ../repo/:/app/repo/
-      - ../backend:/app/backend
-    command: sh -c "poetry run uvicorn backend.__main__:app --host 0.0.0.0 --port 5000"
+      - ../backend:/app
+    command: sh -c "poetry run uvicorn detector.__main__:app --host 0.0.0.0 --port 5000"
     ports:
       - "8000:5000"
 
@@ -51,15 +51,32 @@ services:
       - BACKEND_URI=${BACKEND_URI}
     volumes:
       - ../repo/:/app/repo/
-      - ../backend:/app/backend
+      - ../backend:/app
 
-    command: sh -c "poetry run celery -A backend.tasks.app_worker worker -l INFO --pool=solo"
+    command: sh -c "poetry run celery -A detector.tasks.app_worker worker -l INFO --pool=solo"
     depends_on:
       - redis
       - rabbitmq
-      - api
+      - backend
 
+  frontend:
+    container_name: frontend
+    build:
+      dockerfile: deploy/frontend/Dockerfile
+      context: ..
+#    command: sh -c "serve -s dist -p 8080 "
+    ports:
+      - '8080:80'
+    volumes:
+      - ./frontend/:/app
+    depends_on:
+      - backend
 
 volumes:
   repo:
     external: true
+
+networks:
+  detector-net:
+    external: true
+
