@@ -3,7 +3,8 @@
     <input type="file" ref="fileInput" accept="image/*" />
     <button @click="uploadPhoto">Отправить</button>
     <div v-if="task !== null">
-      <img :src="task.detection" alt="Detection Preview" />
+      <h5>Результат предсказания</h5>
+      <span>{{task}}</span>
     </div>
   </div>
 </template>
@@ -22,19 +23,17 @@ export default {
       const file = this.$refs.fileInput.files[0];
       const formData = new FormData();
       formData.append('files', file);
+      this.task = async (newUser) => {
+        try {
+          const response = axios.post('http://localhost:8000/api/face/process', formData,
+            {headers: {"Content-Type": "multipart/form-data"}}
+          )
+          return response.data
+        }
+        except
+      };
 
-      axios.post('http://localhost:8000/api/face/process', formData)
-        .then(response => {
-          if (response.status === 200) {
-            this.task = response.data;
-            this.fetchPhoto();
-          } else {
-            console.error('Error uploading photo');
-          }
-        })
-        .catch(error => {
-          console.error('Error uploading photo', error);
-        });
+
     },
     fetchPhoto() {
       const detectionUrl = `http://localhost:8000/api/face/result/${this.task.id}/detection`;
